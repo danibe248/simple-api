@@ -1,6 +1,9 @@
 import flask, boto3
 from flask import request, jsonify
 
+app = flask.Flask(__name__)
+app.config["DEBUG"] = True
+
 books = [
     {'id': 0,
      'title': 'A Fire Upon the Deep',
@@ -49,6 +52,4 @@ TABLE_NAME = "questions"
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table(TABLE_NAME)
 
-app = flask.Flask(__name__)
-app.config["DEBUG"] = True
 app.run(host='0.0.0.0',port=55500)
