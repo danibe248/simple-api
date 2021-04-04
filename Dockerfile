@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 
 RUN apt update
-RUN apt install -y python3-pip
+RUN apt install -y python3-pip curl
 RUN mkdir api/
 COPY requirements.txt api/
 RUN pip3 install -r api/requirements.txt
