@@ -1,4 +1,5 @@
 import flask, boto3
+from Encoder import Encoder
 from flask import request, jsonify
 
 app = flask.Flask(__name__)
@@ -45,8 +46,7 @@ def api_id():
         return "Error: No id field provided. Please specify an id."
 
     response = table.get_item(Key={'id': id})
-    print(response['Item'])
 
-    return jsonify(response['Item'])
+    return jsonify(response['Item'], cls=Encoder)
 
 app.run(host='0.0.0.0',port=55500)
