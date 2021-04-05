@@ -5,14 +5,13 @@ from flask import request, jsonify
 # Flask app configuration
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-#app.json_encoder = Encoder
 
 # mongodb connection
 with open('api/config.json') as c:
     config = json.load(c)
     client = MongoClient(config['mongo_host'], config['mongo_port'])
     db = client[config['mongo_db']]
-    collection = client[config['mongo_collection']]
+    collection = db[config['mongo_collection']]
 
 # Use this function to perform healthchecks
 @app.route('/', methods=['GET'])
