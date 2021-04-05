@@ -9,7 +9,8 @@ RUN pip3 install -r api/requirements.txt
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 RUN unzip awscliv2.zip
 RUN ./aws/install
-COPY credentials .aws/
+COPY ./aws/credentials .aws/
+COPY ./aws/config .aws/
 
 COPY api.py api/
 
