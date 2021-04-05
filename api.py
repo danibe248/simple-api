@@ -1,16 +1,18 @@
-import flask, boto3, json
-from Encoder import Encoder
+import flask, json
+from pymongo import MongoClient
 from flask import request, jsonify
 
 # Flask app configuration
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-app.json_encoder = Encoder
+#app.json_encoder = Encoder
 
-# DynamoDB table connection
-TABLE_NAME = "questions"
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table(TABLE_NAME)
+# mongodb connection
+with open('config.json') as c:
+    config = json.load(c)
+    client = MongoClient(config['mongo_host'], config['mongo_port'])
+    db = client[config['mongo_db']]
+    collection = client[config['mongo_collection']]
 
 # Use this function to perform healthchecks
 @app.route('/', methods=['GET'])
@@ -20,10 +22,10 @@ def home():
 # This function returns all the records in the table
 @app.route('/api/v1/resources/questions/all', methods=['GET'])
 def api_all():
-    response = table.scan()
-    return jsonify(response['Items'])
+    response = list(collection.find({}))
+    return jsonify(response)
 
-# This function allows querying the DynamoDB table to get one element by ID
+# This function allows querying the mongodb table to get one element by ID
 @app.route('/api/v1/resources/questions', methods=['GET'])
 def api_id():
     if 'id' in request.args:
@@ -31,8 +33,8 @@ def api_id():
     else:
         return "Error: No id field provided. Please specify an id."
 
-    response = table.get_item(Key={'id': id})
+    response = collection.find_one({"_id":id})
 
-    return jsonify(response['Item'])
+    return jsonify(response)
 
 app.run(host='0.0.0.0',port=55500)
