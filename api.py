@@ -8,7 +8,7 @@ app.config["DEBUG"] = True
 #app.json_encoder = Encoder
 
 # mongodb connection
-with open('./config.json') as c:
+with open('api/config.json') as c:
     config = json.load(c)
     client = MongoClient(config['mongo_host'], config['mongo_port'])
     db = client[config['mongo_db']]
