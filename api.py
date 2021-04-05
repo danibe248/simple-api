@@ -45,6 +45,7 @@ def api_id():
         return "Error: No id field provided. Please specify an id."
 
     response = table.get_item(Key={'id': id})
+    print(response['Item'])
 
     return jsonify(response['Item'])
 
