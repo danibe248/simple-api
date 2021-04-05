@@ -15,7 +15,7 @@ table = dynamodb.Table(TABLE_NAME)
 # Use this function to perform healthchecks
 @app.route('/', methods=['GET'])
 def home():
-    return '''HEALTHCHECK'''
+    return '''Congratulations! You've found a very simple API!'''
 
 # This function returns all the records in the table
 @app.route('/api/v1/resources/questions/all', methods=['GET'])
