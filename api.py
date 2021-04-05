@@ -4,6 +4,10 @@ from flask import request, jsonify
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
+TABLE_NAME = "questions"
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table(TABLE_NAME)
+
 books = [
     {'id': 0,
      'title': 'A Fire Upon the Deep',
@@ -28,28 +32,20 @@ def home():
     return '''This was a get!'''
 
 
-@app.route('/api/v1/resources/books/all', methods=['GET'])
+@app.route('/api/v1/resources/questions/all', methods=['GET'])
 def api_all():
     return jsonify(books)
 
 
-@app.route('/api/v1/resources/books', methods=['GET'])
+@app.route('/api/v1/resources/questions', methods=['GET'])
 def api_id():
     if 'id' in request.args:
         id = int(request.args['id'])
     else:
         return "Error: No id field provided. Please specify an id."
 
-    results = []
+    response = table.get_item(Key={'id': id})
 
-    for book in books:
-        if book['id'] == id:
-            results.append(book)
-
-    return jsonify(results)
-
-TABLE_NAME = "questions"
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table(TABLE_NAME)
+    return jsonify(response['Item'])
 
 app.run(host='0.0.0.0',port=55500)
