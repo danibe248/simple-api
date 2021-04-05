@@ -11,6 +11,7 @@ COPY ./aws/credentials /aws/
 COPY ./aws/config /aws/
 
 COPY api.py api/
+COPY Encoder.py api/
 
 EXPOSE 55500
 
