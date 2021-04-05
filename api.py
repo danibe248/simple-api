@@ -1,9 +1,10 @@
-import flask, boto3
+import flask, boto3, json
 from Encoder import Encoder
 from flask import request, jsonify
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+app.json_encoder = Encoder
 
 TABLE_NAME = "questions"
 dynamodb = boto3.resource('dynamodb')
@@ -47,6 +48,6 @@ def api_id():
 
     response = table.get_item(Key={'id': id})
 
-    return jsonify(response['Item'], cls=Encoder)
+    return jsonify(response['Item'])
 
 app.run(host='0.0.0.0',port=55500)
